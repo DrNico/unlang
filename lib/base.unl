@@ -1,0 +1,45 @@
+
+#module Void
+
+    Void :: Type
+         := forall a. a ;
+    
+    elimVoid :: forall r. r -> Void -> r
+             := \r void. r ;
+
+#end module
+
+#module Unit
+    
+    Unit :: Type
+         := forall a. a -> a ;
+
+    unit :: Unit
+         := \x. x ;
+    
+    elimUnit :: forall r. r -> Unit -> r
+             := \r u. r ;
+
+    idUnit :: Unit -> Unit
+           := elimUnit unit ;
+    
+#end module
+
+#module Bool
+    
+    Bool :: Type
+         := forall a. a -> a -> a ;
+
+    true :: Bool
+         := \t f. t ;
+
+    false :: Bool
+          := \t f. f ;
+
+    ifte :: forall r. r -> r -> Bool -> r
+         := \then else. \bool. bool then else ;
+    
+    idBool :: Bool -> Bool
+           := ifte true false ;
+    
+#end module
