@@ -1,0 +1,23 @@
+
+Maybe :: forall a. a -> Type
+      := \a. forall r. r -> (a -> r) -> r ;
+
+nothing :: forall a. Maybe a
+        := \n j. n ;
+
+just :: forall a. a -> Maybe a
+     := \x. \n j. j x ;
+
+elimMaybe :: forall a r. r -> (a -> r) -> Maybe a -> r
+          := \n j. \maybe. maybe n j ;
+
+idMaybe :: forall a. Maybe a -> Maybe a
+        := elimMaybe nothing just ;
+
+
+# Properties
+
+# idMaybe preserves judgemental equality
+
+idMaybe_is_id :: forall a. m : Maybe a -> Eq m (idMaybe m)
+              := refl ;
