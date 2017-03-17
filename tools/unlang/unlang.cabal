@@ -2,12 +2,19 @@
 name:                unlang
 version:             1.0.0.0
 synopsis:            The unique computer language
--- description:
+description:         Unlang is a small computer language based on pure lambda calculus
+                     with a powerful type system. Unlang supports simply-typed lambda
+                     calculus (with explicit forall binders), augmented with type functions
+                     at any type level and dependent types. The purpose of unlang v1
+                     is to demonstrate the logical and computational power of such a simple
+                     language. The future of unlang is both as a language for "programming
+                     in the large" and as a proof engine based on homotopy type theory, with
+                     constructs built on top of the kernel formed by the current version.
 license:             MIT
 license-file:        LICENSE
 author:              Nicolas Godbout
 maintainer:          nicolas.godbout@gmail.com
--- copyright:
+copyright:           (c) 2017, Nicolas Godbout
 category:            Language
 build-type:          Simple
 extra-source-files:  ChangeLog.md
@@ -20,7 +27,8 @@ executable unlang
   build-depends:       base >=4.9 && <4.10,
                        bytestring >=0.10 && <0.11,
                        containers >=0.5 && <0.6,
-                       pretty >=1.1 && <1.2
+                       pretty >=1.1 && <1.2,
+                       transformers >=0.5 && <0.6
   -- hs-source-dirs:
   build-tools:         alex, happy
   build-depends:       array >= 0.5 && <0.6

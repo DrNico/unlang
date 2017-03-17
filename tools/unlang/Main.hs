@@ -1,8 +1,12 @@
 
 module Main where
 
+import UnEnv
 import UnParse
+import UnPretty
 import UnSyntax
+import UnSemantics
+import UnCheck
 
 import Control.Monad.IO.Class   ( liftIO )
 import Data.ByteString.Lazy     ( ByteString, getContents, readFile )
@@ -14,27 +18,24 @@ import Prelude hiding ( getContents, readFile )
 main :: IO ()
 main = do
     args <- getArgs
-    runArgs args
+    runEnv $ runArgs args
 
 parse :: ByteString -> UnEnv Module
 parse bs = do
     case parseModule (lexer1 bs) of
         Right mod -> do
-            liftIO $ putStrLn "Parse successful"
-            liftIO $ putStrLn $ pShow mod
+            -- liftIO $ putStrLn "Parse successful"
+            -- liftIO $ putStrLn $ pShow mod
             return mod
         Left e  -> do
             liftIO $ putStrLn e
             liftIO $ exitFailure
 
-type UnEnv a = IO a
-
 runArgs :: [String] -> UnEnv ()
 runArgs [] = do
     source <- liftIO $ getContents
     mod <- parse source
---    g <- check mod
-    return ()
+    buildModule mod
 runArgs ["--help"] = do
     usage
     liftIO exitSuccess
@@ -55,7 +56,7 @@ runArgs (f : fs) =
         f -> do
             source <- liftIO $ readFile f
             mod <- parse source
---            g <- check mod
+            buildModule mod
             moreArgs fs
 
 moreArgs :: [String] -> UnEnv ()
@@ -64,7 +65,7 @@ moreArgs [] =
 
 usage :: UnEnv ()
 usage =
-    liftIO $ putStrLn $ unlines [
+    liftIO $ putStr $ unlines [
         "unlang <flag>* [<file>*]",
         "  --help        This usage information.",
         "  --version"
@@ -72,4 +73,4 @@ usage =
 
 version :: UnEnv ()
 version =
-    liftIO $ putStrLn $ "UnLang, version 1.0.0"
+    liftIO $ putStrLn $ "Unlang, version 1.0.0"

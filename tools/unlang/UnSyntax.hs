@@ -4,6 +4,7 @@ module UnSyntax
 where
 
 import UnLex                    (AlexPosn)
+import UnPretty
 
 import Data.ByteString.Lazy.Char8
 import Data.ByteString.Short    (ShortByteString)
@@ -35,16 +36,6 @@ getLoc :: Located a -> Posn
 getLoc (Loc pos _) = pos
 
 
-class Pretty a where
-    pPrint     :: a -> Doc
-    pPrint = pPrintPrec 0
-
-    pPrintPrec :: Int -> a -> Doc
-
-    pShow      :: a -> String
-    pShow = render . pPrint
-
-
 instance Pretty Module where
     pPrintPrec _ (Module (Loc _ name) decls) =
         text "#module" <+> (text $ unpack name)
@@ -74,8 +65,3 @@ instance Pretty Type where
             pPrintPrec 10 m <+> pPrintPrec 11 n
     pPrintPrec prec (All (Loc _ a) (Loc _ t)) =
         text "forall " <> (text $ unpack a) <> char '.' <+> pPrintPrec 0 t
-
-
-maybeParens :: Bool -> Doc -> Doc
-maybeParens False doc = doc
-maybeParens True  doc = parens doc
